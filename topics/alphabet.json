@@ -1,0 +1,42 @@
+{
+  "id": "abc",
+  "kind": "alphabet",
+  "title": "Алфавит",
+  "subtitle": "Буквы, их названия и звуки",
+  "units": [
+    { "id": "a1", "title": "Буквы A–F", "teams": ["A", "B", "C", "D", "E", "F"] },
+    { "id": "a2", "title": "Буквы G–L", "teams": ["G", "H", "I", "J", "K", "L"] },
+    { "id": "ar1", "title": "Повтор A–L", "review": ["a1", "a2"] },
+    { "id": "a3", "title": "Буквы M–R", "teams": ["M", "N", "O", "P", "Q", "R"] },
+    { "id": "a4", "title": "Буквы S–Z", "teams": ["S", "T", "U", "V", "W", "X", "Y", "Z"] },
+    { "id": "ar2", "title": "Весь алфавит", "review": ["a1", "a2", "a3", "a4"], "final": true }
+  ],
+  "teams": {
+    "A": { "name": "ay", "ru": "эй", "nameIpa": "/eɪ/", "sound": "/æ/", "key": { "w": "apple", "e": "🍎" }, "words": [{ "w": "apple", "e": "🍎" }, { "w": "ant", "e": "🐜" }, { "w": "axe", "e": "🪓" }] },
+    "B": { "name": "bee", "ru": "би", "nameIpa": "/biː/", "sound": "/b/", "key": { "w": "ball", "e": "⚽" }, "words": [{ "w": "ball", "e": "⚽" }, { "w": "bus", "e": "🚌" }, { "w": "banana", "e": "🍌" }, { "w": "bat", "e": "🦇" }] },
+    "C": { "name": "see", "ru": "си", "nameIpa": "/siː/", "sound": "/k/", "key": { "w": "cat", "e": "🐱" }, "words": [{ "w": "cat", "e": "🐱" }, { "w": "car", "e": "🚗" }, { "w": "cake", "e": "🎂" }, { "w": "cup", "e": "☕" }] },
+    "D": { "name": "dee", "ru": "ди", "nameIpa": "/diː/", "sound": "/d/", "key": { "w": "dog", "e": "🐕" }, "words": [{ "w": "dog", "e": "🐕" }, { "w": "duck", "e": "🦆" }, { "w": "drum", "e": "🥁" }] },
+    "E": { "name": "ee", "ru": "и", "nameIpa": "/iː/", "sound": "/e/", "key": { "w": "egg", "e": "🥚" }, "words": [{ "w": "egg", "e": "🥚" }, { "w": "elephant", "e": "🐘" }] },
+    "F": { "name": "ef", "ru": "эф", "nameIpa": "/ef/", "sound": "/f/", "key": { "w": "fish", "e": "🐟" }, "words": [{ "w": "fish", "e": "🐟" }, { "w": "fox", "e": "🦊" }, { "w": "frog", "e": "🐸" }] },
+    "G": { "name": "gee", "ru": "джи", "nameIpa": "/dʒiː/", "sound": "/g/", "key": { "w": "goat", "e": "🐐" }, "words": [{ "w": "goat", "e": "🐐" }, { "w": "gift", "e": "🎁" }, { "w": "grapes", "e": "🍇" }] },
+    "H": { "name": "aitch", "ru": "эйч", "nameIpa": "/eɪtʃ/", "sound": "/h/", "key": { "w": "hat", "e": "🎩" }, "words": [{ "w": "hat", "e": "🎩" }, { "w": "horse", "e": "🐴" }, { "w": "house", "e": "🏡" }] },
+    "I": { "name": "eye", "ru": "ай", "nameIpa": "/aɪ/", "sound": "/ɪ/", "key": { "w": "ink", "e": "🖋️" }, "words": [{ "w": "ink", "e": "🖋️" }] },
+    "J": { "name": "jay", "ru": "джей", "nameIpa": "/dʒeɪ/", "sound": "/dʒ/", "key": { "w": "juice", "e": "🧃" }, "words": [{ "w": "juice", "e": "🧃" }, { "w": "jeans", "e": "👖" }, { "w": "jellyfish", "e": "🪼" }] },
+    "K": { "name": "kay", "ru": "кей", "nameIpa": "/keɪ/", "sound": "/k/", "key": { "w": "kite", "e": "🪁" }, "words": [{ "w": "kite", "e": "🪁" }, { "w": "king", "e": "🤴" }, { "w": "key", "e": "🔑" }, { "w": "kangaroo", "e": "🦘" }] },
+    "L": { "name": "el", "ru": "эл", "nameIpa": "/el/", "sound": "/l/", "key": { "w": "lion", "e": "🦁" }, "words": [{ "w": "lion", "e": "🦁" }, { "w": "lemon", "e": "🍋" }, { "w": "leaf", "e": "🍃" }] },
+    "M": { "name": "em", "ru": "эм", "nameIpa": "/em/", "sound": "/m/", "key": { "w": "moon", "e": "🌙" }, "words": [{ "w": "moon", "e": "🌙" }, { "w": "mouse", "e": "🐭" }, { "w": "milk", "e": "🥛" }] },
+    "N": { "name": "en", "ru": "эн", "nameIpa": "/en/", "sound": "/n/", "key": { "w": "nose", "e": "👃" }, "words": [{ "w": "nose", "e": "👃" }, { "w": "nut", "e": "🥜" }, { "w": "nest", "e": "🪺" }] },
+    "O": { "name": "oh", "ru": "оу", "nameIpa": "/əʊ/", "sound": "/ɒ/", "key": { "w": "octopus", "e": "🐙" }, "words": [{ "w": "octopus", "e": "🐙" }, { "w": "orange", "e": "🍊" }, { "w": "ox", "e": "🐂" }] },
+    "P": { "name": "pee", "ru": "пи", "nameIpa": "/piː/", "sound": "/p/", "key": { "w": "pig", "e": "🐷" }, "words": [{ "w": "pig", "e": "🐷" }, { "w": "pen", "e": "🖊️" }, { "w": "panda", "e": "🐼" }] },
+    "Q": { "name": "cue", "ru": "кью", "nameIpa": "/kjuː/", "sound": "/kw/", "key": { "w": "queen", "e": "👸" }, "words": [{ "w": "queen", "e": "👸" }, { "w": "quiz", "e": "📝" }] },
+    "R": { "name": "ar", "ru": "а:", "nameIpa": "/ɑː/", "sound": "/r/", "key": { "w": "rabbit", "e": "🐰" }, "words": [{ "w": "rabbit", "e": "🐰" }, { "w": "ring", "e": "💍" }, { "w": "robot", "e": "🤖" }, { "w": "rain", "e": "🌧️" }] },
+    "S": { "name": "ess", "ru": "эс", "nameIpa": "/es/", "sound": "/s/", "key": { "w": "sun", "e": "☀️" }, "words": [{ "w": "sun", "e": "☀️" }, { "w": "snake", "e": "🐍" }, { "w": "sock", "e": "🧦" }, { "w": "star", "e": "⭐" }] },
+    "T": { "name": "tee", "ru": "ти", "nameIpa": "/tiː/", "sound": "/t/", "key": { "w": "tree", "e": "🌳" }, "words": [{ "w": "tree", "e": "🌳" }, { "w": "tiger", "e": "🐯" }, { "w": "tent", "e": "⛺" }] },
+    "U": { "name": "you", "ru": "ю", "nameIpa": "/juː/", "sound": "/ʌ/", "key": { "w": "umbrella", "e": "☂️" }, "words": [{ "w": "umbrella", "e": "☂️" }, { "w": "up", "e": "⬆️" }] },
+    "V": { "name": "vee", "ru": "ви", "nameIpa": "/viː/", "sound": "/v/", "key": { "w": "van", "e": "🚐" }, "words": [{ "w": "van", "e": "🚐" }, { "w": "violin", "e": "🎻" }, { "w": "volcano", "e": "🌋" }] },
+    "W": { "name": "double-you", "ru": "дабл-ю", "nameIpa": "/ˈdʌbəl juː/", "sound": "/w/", "key": { "w": "web", "e": "🕸️" }, "words": [{ "w": "web", "e": "🕸️" }, { "w": "worm", "e": "🪱" }, { "w": "wolf", "e": "🐺" }, { "w": "window", "e": "🪟" }] },
+    "X": { "name": "ex", "ru": "экс", "nameIpa": "/eks/", "sound": "/ks/", "end": true, "key": { "w": "box", "e": "📦" }, "words": [{ "w": "box", "e": "📦" }, { "w": "fox", "e": "🦊" }, { "w": "six", "e": "6️⃣" }] },
+    "Y": { "name": "why", "ru": "уай", "nameIpa": "/waɪ/", "sound": "/j/", "key": { "w": "yo-yo", "e": "🪀" }, "words": [{ "w": "yo-yo", "e": "🪀" }, { "w": "yellow", "e": "💛" }, { "w": "yak", "e": "🐃" }] },
+    "Z": { "name": "zed", "ru": "зед", "nameIpa": "/zed/", "sound": "/z/", "key": { "w": "zebra", "e": "🦓" }, "words": [{ "w": "zebra", "e": "🦓" }, { "w": "zip", "e": "🤐" }, { "w": "zero", "e": "0️⃣" }] }
+  }
+}

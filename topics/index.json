@@ -1,0 +1,7 @@
+{
+  "dictionary": "dictionary.json",
+  "packs": [
+    { "id": "abc", "file": "alphabet.json" },
+    { "id": "phonics", "file": "phonics.json" }
+  ]
+}

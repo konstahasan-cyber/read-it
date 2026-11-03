@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Проверка заданий</title>
+  <style>
+    body { font: 15px/1.4 system-ui, sans-serif; margin: 16px; color: #233064; background: #f7f9fc; }
+    table { border-collapse: collapse; margin: 12px 0; }
+    td, th { border: 1px solid #ccd6e8; padding: 4px 8px; text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    .bad { background: #fde7e9; } .ok { background: #e1f5ea; }
+  </style>
+</head>
+<body>
+  <h1>Проверка случайности и корректности заданий</h1>
+  <p id="sum">Считаю…</p>
+  <div id="out"></div>
+  <script type="module">
+    const bust = '?t=' + Date.now(); // always test the current files, not a cached copy
+    const { loadCourse, poolFor, packTeams } = await import('../js/data.js' + bust);
+    const { buildSession } = await import('../js/engine.js' + bust);
+
+    const RUNS = 300;
+    const course = await loadCourse('../topics/');
+    const rows = [];
+    const problems = [];
+    const pos = {};
+    const has = (t, w) => t.re.test(w.toLowerCase());
+
+    // Whole units, plus every 5-minute step (2–3 rules, 8 exercises) as the app runs them.
+    const targets = course.units.flatMap((unit) => [
+      { unit, id: unit.id, focus: unit.teams, step: null },
+      ...(unit.steps || []).map((ids, i) => ({ unit, id: `${unit.id} шаг ${i + 1}`, focus: ids, step: i })),
+    ]);
+    for (const { unit, id, focus: ids, step } of targets) {
+      const focus = ids.map((x) => course.teams.get(x));
+      let pool = [poolFor(course, unit, step), poolFor(course, unit)].find((p) => p.length >= 5) || packTeams(course, unit.pack);
+      const r = { unit: id, sessions: 0, short: 0, dupKey: 0, dupWord: 0, sameTypeNext: 0, sameTeamNext: 0, run3: 0, ambiguous: 0, overlapPrev: 0, types: new Set() };
+      let recent = [];
+      for (const mode of ['practice', 'test']) {
+        if (step != null && mode === 'test') continue;
+        const count = step != null ? 8 : mode === 'test' ? (unit.final ? 24 : unit.review ? 18 : 14) : 10;
+        for (let i = 0; i < RUNS; i++) {
+          const qs = buildSession({ focus, pool, count, recent, canSay: false });
+          r.sessions++;
+          if (qs.length < count) r.short++;
+          const keys = qs.map((q) => q.key);
+          if (new Set(keys).size !== keys.length) r.dupKey++;
+          const words = qs.map((q) => q.word?.toLowerCase()).filter(Boolean);
+          if (new Set(words).size !== words.length) r.dupWord++;
+          const prevKeys = new Set(recent.slice(0, count));
+          r.overlapPrev += keys.filter((k) => prevKeys.has(k)).length / keys.length;
+          recent = [...keys, ...recent].slice(0, 40);
+          const ans = {}; // per layout (number of buttons)
+          qs.forEach((q, j) => {
+            r.types.add(q.type);
+            const p = qs[j - 1];
+            if (p && p.type === q.type) r.sameTypeNext++;
+            if (p && focus.length > 1 && p.team === q.team) r.sameTeamNext++;
+            if (q.options) {
+              const k = q.options.length;
+              const at = q.options.findIndex((o) => o.id === q.answer);
+              (pos[k] ||= Array(k).fill(0))[at]++;
+              const h = (ans[k] ||= []);
+              h.push(at);
+              if (h.length >= 3 && h.slice(-3).every((x) => x === at)) r.run3++;
+              // Exactly one right answer: for rule options, distractor rules must not occur in the word.
+              const target = course.teams.get(q.team);
+              if (['findSound', 'listen', 'missing'].includes(q.type)) {
+                const bad = q.options.filter((o) => o.id !== q.answer).some((o) => has(course.teams.get(o.id), q.word));
+                if (bad || !has(target, q.word)) { r.ambiguous++; problems.push(`${q.type} ${q.word}: ${q.options.map((o) => o.text).join(', ')}`); }
+              }
+              if (q.type === 'teamWord') {
+                const wrong = q.options.filter((o) => o.id !== q.answer).some((o) => has(target, o.text));
+                if (wrong) { r.ambiguous++; problems.push(`teamWord ${target.label}: ${q.options.map((o) => o.text).join(', ')}`); }
+              }
+              if (q.type === 'spell' || q.type === 'hearPick') {
+                const same = q.options.filter((o) => o.text.toLowerCase() === q.word.toLowerCase()).length;
+                if (same !== 1) { r.ambiguous++; problems.push(`${q.type} ${q.word}: ${q.options.map((o) => o.text).join(', ')}`); }
+              }
+              if (q.type === 'firstSound') {
+                const bad = q.options.filter((o) => o.id !== q.answer).some((o) => has(course.teams.get(o.id), q.word));
+                if (bad) { r.ambiguous++; problems.push(`firstSound ${q.word}: ${q.options.map((o) => o.text).join(', ')}`); }
+              }
+            }
+          });
+        }
+      }
+      r.overlapPrev = Math.round((r.overlapPrev / r.sessions) * 100) + '%';
+      r.types = r.types.size;
+      rows.push(r);
+    }
+
+    const cols = ['unit', 'sessions', 'short', 'dupKey', 'dupWord', 'sameTypeNext', 'sameTeamNext', 'run3', 'ambiguous', 'overlapPrev', 'types'];
+    const must0 = ['dupKey', 'dupWord', 'sameTypeNext', 'run3', 'ambiguous'];
+    let fails = 0;
+    const html = `<table><tr>${cols.map((c) => `<th>${c}</th>`).join('')}</tr>${rows.map((r) => `<tr>${cols.map((c) => {
+      const bad = must0.includes(c) && r[c] > 0; if (bad) fails++;
+      return `<td class="${must0.includes(c) ? (bad ? 'bad' : 'ok') : ''}">${r[c]}</td>`;
+    }).join('')}</tr>`).join('')}</table>
+    <h2>Позиция правильного ответа (сколько раз на каждой кнопке)</h2>
+    <table><tr><th>кнопок</th><th>распределение</th></tr>${Object.entries(pos).map(([k, v]) => `<tr><td>${k}</td><td>${v.map((x) => (100 * x / v.reduce((a, b) => a + b, 0)).toFixed(1) + '%').join(' · ')}</td></tr>`).join('')}</table>
+    ${problems.length ? `<h2>Проблемы</h2><pre>${[...new Set(problems)].slice(0, 40).join('\n')}</pre>` : ''}`;
+    document.getElementById('out').innerHTML = html;
+    document.getElementById('sum').textContent = fails ? `Есть нарушения: ${fails}` : `Все проверки пройдены: ${rows.reduce((s, r) => s + r.sessions, 0)} сессий`;
+    window.RESULT = { fails, rows, pos, problems: [...new Set(problems)] };
+  </script>
+</body>
+</html>
